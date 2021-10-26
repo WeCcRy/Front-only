@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market</title>
+    <link rel="stylesheet" href="shopping.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //搜索栏搜索历史和清除历史
+            var result = new Array();
+            $('.searchButton').click(function () {
+                var text = "";
+                //将输入数据添加到数组
+                result.push($('.searchTerm').val());
+                //for循环将数组数据展示给用户
+                for (var i = 0; i < result.length; i++) {
+                    text += "<span>" + result[i] + "</span>" + "&nbsp;&nbsp;&nbsp;"
+                }
+                console.log(text);
+                //清空并填充搜索历史
+                $('.textsearch').empty();
+                $('.textsearch').html(text);
+            })
+            //清除搜索历史
+            $('.clearhistory').click(function () {
+                $('.textsearch').empty();
+            })
+            //左侧导航栏展示效果
+            $('.icon a').mouseover(function () {
+                $('.extendlist').css('display', 'block');
+                $('.leftnav').css('width', '1000px')
+            })
+            $('.leftnav').mouseleave(function () {
+                $('.extendlist').css('display', 'none')
+            })
+            //产品轮播图
+            function slideshow() {
+                var slideshow = document.getElementById("slideshow"),
+                    imgs = slideshow.getElementsByTagName("img"), //得到图片们
+                    pages = slideshow.getElementsByTagName("span"), //得到页码们
+                    buttons = slideshow.getElementsByTagName("p"), //得到描述们
+                    left_btn = buttons[0],
+                    right_btn = buttons[1],
+                    current = 0;
+
+                function slideOff() {
+                    imgs[current].className = ""; //图片淡出
+                    pages[current].className = "";
+                }
+                function slideOn() {
+                    imgs[current].className = "active"; //图片淡入
+                    pages[current].className = "active";
+                }
+
+                function changeSlide() { //切换图片的函数
+                    slideOff();
+                    current++; //自增1
+                    if (current >= 7) current = 0;
+                    slideOn();
+                }
+
+                //每2s调用changeSlide函数进行图片轮播
+                var slideon = setInterval(changeSlide, 2500);
+
+                slideshow.onmouseover = function () {
+                    clearInterval(slideon); //当鼠标移入时清除轮播事件
+                }
+                slideshow.onmouseout = function () {
+                    slideon = setInterval(changeSlide, 2500); //当鼠标移出时重新开始轮播事件
+                }
+
+                for (var i = 0; i < pages.length; i++) { //定义鼠标移入和移出页码事件
+                    pages[i].onmouseover = function () {
+                        slideOff(); //图片淡出
+                        current = this.getAttribute("name"); //得到鼠标停留的页码对应的current
+                        slideOn(); //图片淡出
+                    }
+                }
+
+                left_btn.onclick = function () {
+                    slideOff(); //图片淡出
+                    current--;
+                    if (current < 0) current = 6;
+                    slideOn(); //图片淡入
+                }
+                right_btn.onclick = function () {
+                    slideOff(); //图片淡出
+                    current++;
+                    if (current > 6) current = 0;
+                    slideOn(); //图片淡入
+                }
+            }
+
+            slideshow();
+
+            //限时秒杀
+            var inputTime = new Date(2021, 01, 11, 18, 00, 00);//设置倒计时的结束时间
+            countDown();//先调用一次这个函数 防止第一次刷新页面有空白
+            //2、开启定时器
+            setInterval(countDown, 1000);//1000毫秒，每一秒钟调用一次函数
+            //3、倒计时-时分秒函数
+            function countDown() {
+                var nowTime = new Date(); //返回的是当前时间的总的毫秒数
+                var times = (inputTime - nowTime) / 1000; // times是剩余时间的总的毫秒数
+                var h = parseInt(times / 60 / 60 % 24);
+                h = h < 10 ? '0' + h : h;//判断数值小于10的情况 如 0-9改为 00-09
+                $('.hour').html(h);//更改div里面的内容 把h给获取元素hour的内容
+                var m = parseInt(times / 60 % 60);
+                m = m < 10 ? '0' + m : m;
+                $('.minute').html(m);//同上
+                var s = parseInt(times % 60);
+                s = s < 10 ? '0' + s : s;
+                $('.second').html(s);//同上
+            }
+            // 产品轮播图
+            function productshow() {
+                var productn = $('.productn');
+                var index = 0;
+                var weiyi = "";
+                function next() {
+                    index = index == 2 ? 0 : ++index;
+                    weiyi = -index * 300 + "px";
+                    productn.css('top', weiyi)
+
+                }
+                function pre() {
+                    index = index == 0 ? 2 : --index;
+                    weiyi = -index * 300 + "px";
+                    productn.css('top', weiyi)
+                }
+                function autoPlay() {
+                    autoTinmer = setInterval(function () {
+                        next();
+                    }, 2000)
+                };
+                autoPlay()
+                var index = 0;
+                var autoTinmer;
+                $('.product .left').click(function () {
+                    clearInterval(autoTinmer)
+                    pre()
+                    autoPlay()
+                })
+                $('.product .right').click(function () {
+                    clearInterval(autoTinmer)
+                    next()
+                    autoPlay()
+                })
+
+                $('.product').mouseover(function () {
+                    clearInterval(autoTinmer)
+                })
+                $('.product').mouseout(function () {
+                    clearInterval(autoTinmer)
+                    autoPlay()
+                })
+            }
+            productshow();
+
+            $('#up').click(function () {
+                window.scrollTo(0, 0)
+            })
+            $('#mid').click(function () {
+                window.scrollTo(0, 662)
+            })
+            $('#mid2').click(function () {
+                window.scrollTo(0, 982)
+            })
+            $('#down').click(function () {
+                window.scrollTo(0, 2373)
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="w">
+            <div class="location">
+                <img src="./login-images/locate.png" alt="" style="width: auto;height: 30px;float: left;">
+                <p>上海</p>
+            </div>
+            <div class="top-nav">
+                <ul>
+                    <li class="top-nav-info" style="border: none;"><a href="#">Mobile</a></li>
+                    <li class="top-nav-info"><a href="#">Support</a></li>
+                    <li class="top-nav-info"><a href="#">VIP Service</a></li>
+                    <li class="top-nav-info"><a href="#">My Order</a></li>
+                    <li class="top-nav-info"><a href="login.html">Register Free</a></li>
+                    <li class="top-nav-info"><a href="login.html">Log in</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="top-search">
+        <div class="w">
+            <a href="homepage.html">
+                <img src="./login-images/logo1.png"
+                    style="width: auto;height: 110px;float: left;margin-top: 15px;margin-left: 40px;"></a>
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" placeholder="What are you looking for?">
+                    <button type="submit" class="searchButton">
+                        <i class="fa"><img src="./login-images/search.png" alt="" style="width: auto;height: 15px;"></i>
+                    </button>
+                </div>
+                <div style="width: 100%;height: 30px;margin-top: 5px;">
+                    <span class="textsearch">搜索历史</span>
+                    <button class="clearhistory">清除搜索历史</button>
+                </div>
+            </div>
+            <div class="loader">
+                <div class="loader-inner">
+                    <div class="loader-line-wrap">
+                        <div class="loader-line"></div>
+                    </div>
+                    <div class="loader-line-wrap">
+                        <div class="loader-line"></div>
+                    </div>
+                    <div class="loader-line-wrap">
+                        <div class="loader-line"></div>
+                    </div>
+                    <div class="loader-line-wrap">
+                        <div class="loader-line"></div>
+                    </div>
+                    <div class="loader-line-wrap">
+                        <div class="loader-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div id="image1"><img src="./login-images/icons/站立购物的女人.png" alt=""></div>
+        <div id="image2"><img src="./login-images/icons/坐着网购的男人.png" alt=""></div>
+        <div id="image3"><img src="./login-images/icons/拎着购物袋的男人2.png" alt=""></div>
+        <div id="image4"><img src="./login-images/icons/坐着网购的男人_1.png" alt=""></div>
+        <div class="w" style="position: relative;">
+            <div class="leftnav">
+                <ul>
+                    <li class="icon"><img src="./login-images/icons/食品_汉堡.png" alt="">
+                        <a href="#">Food</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/蔬菜.png" alt="">
+                        <a href="#">Vegetables</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/水果苹果.png" alt="">
+                        <a href="#">Fruit</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/海鲜.png" alt="">
+                        <a href="#">Seafood</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/饮料.png" alt="">
+                        <a href="#">Beverages</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/日用品.png" alt="">
+                        <a href="#">Daily use</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/美妆.png" alt="">
+                        <a href="#">Cosmetics</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/母婴.png" alt="">
+                        <a href="#">Baby care</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/厨房用具.png" alt="">
+                        <a href="#">Kitchenware</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/数码电器.png" alt="">
+                        <a href="#">Appliance</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/上衣-01.png" alt="">
+                        <a href="#">Clothes</a>
+                    </li>
+                    <li class="icon"><img src="./login-images/icons/爱宠02.png" alt="">
+                        <a href="#">Pets Supplies</a>
+                    </li>
+                </ul>
+                <ul class="extendlist">
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Hamburger</a></li>
+                            <li><a href="#">Chips</a></li>
+                            <li><a href="#">Crackers</a></li>
+                            <li><a href="#">Cookies</a></li>
+                            <li><a href="#">Popcorn</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Pea</a></li>
+                            <li><a href="#">Cabbage</a></li>
+                            <li><a href="#">Celery</a></li>
+                            <li><a href="#">Tomato</a></li>
+                            <li><a href="#">Potato</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Apple</a></li>
+                            <li><a href="#">Orange</a></li>
+                            <li><a href="#">Watermelon</a></li>
+                            <li><a href="#">Strawberry</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Salmon</a></li>
+                            <li><a href="#">Cod</a></li>
+                            <li><a href="#">Squid</a></li>
+                            <li><a href="#">Conger</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Cococola</a></li>
+                            <li><a href="#">Pepsi</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Tissue</a></li>
+                            <li><a href="#">Rag</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Facial Cleanser</a></li>
+                            <li><a href="#">Lipstick</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Milk powder</a></li>
+                            <li><a href="#">Paper diaper</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Slice</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Line</a></li>
+                            <li><a href="#">Battery</a></li>
+                            <li><a href="#">USB Flash Drive</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">T-shirt</a></li>
+                            <li><a href="#">Dress</a></li>
+                            <li><a href="#">Underwear</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                    <li class="extend">
+                        <ul>
+                            <li><a href="#">Dog Food</a></li>
+                            <li><a href="#">Cat Food</a></li>
+                            <li><a href="#">Pets Tools</a></li>
+                            <li><a href="#" style="font-weight: 700;color: #333;">More</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="images">
+                <div class="show">
+                    <div id="slideshow">
+                        <img class="active" src="./login-images/image1.jpg" />
+                        <img src="./login-images/image2.jpg" />
+                        <img src="./login-images/image3.jpg" />
+                        <img src="./login-images/image4.jpg" />
+                        <img src="./login-images/image5.jpg" />
+                        <img src="./login-images/image6.jpg" />
+                        <img src="./login-images/image7.jpg" />
+                        <div>
+                            <span class="active" name="0"></span>
+                            <span name="1"></span>
+                            <span name="2"></span>
+                            <span name="3"></span>
+                            <span name="4"></span>
+                            <span name="5"></span>
+                            <span name="6"></span>
+                        </div>
+                        <p class="left">&lt;</p>
+                        <p class="right">&gt;</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clock w">
+        <div id="box">
+            <div class="txt">Countdown</div>
+            <img src="./login-images/icons/闹钟.png" alt="" id="innerclock">
+            <div class="hour"></div>
+            <!-- 小时与分钟之间的冒号 -->
+            <span class="h_m">:</span>
+            <div class="minute"></div>
+            <!-- 分钟与秒之间的冒号 -->
+            <span class="m_s">:</span>
+            <div class="second"></div>
+        </div>
+        <div class="product">
+            <div class="productn">
+                <div class="products"><a href="#"><img src="./login-images/coriander.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Coriander</span></a>
+                    <div class="price"><span class="pre">$1.99/100g</span><span
+                            class="after"><del>$2.99/100g</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/vegetable.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Pakchoi</span></a>
+                    <div class="price"><span class="pre">$3.99/500g</span><span
+                            class="after"><del>$4.99/500g</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/potato.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Tomato</span></a>
+                    <div class="price"><span class="pre">$4.59/500g</span><span
+                            class="after"><del>$5.99/500g</del></span>
+                    </div>
+                </div>
+            </div>
+            <div class="productn">
+                <div class="products"><a href="#"><img src="./login-images/可口可乐.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Coco Cola</span></a>
+                    <div class="price"><span class="pre">$9.99 </span><span class="after"><del>$12.99</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/奶粉.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Milk Powder</span></a>
+                    <div class="price"><span class="pre">$39.99</span><span class="after"><del>$45.99</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/薯片.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Chips</span></a>
+                    <div class="price"><span class="pre">$2.59</span><span class="after"><del>$3.99</del></span>
+                    </div>
+                </div>
+            </div>
+            <div class="productn">
+                <div class="products"><a href="#"><img src="./login-images/猫粮.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Royal Canin for Cat</span></a>
+                    <div class="price"><span class="pre">$49.99</span><span class="after"><del>$59.99</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/得宝.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Tempo</span></a>
+                    <div class="price"><span class="pre">$2.99</span><span class="after"><del>$4.59</del></span>
+                    </div>
+                </div>
+                <div class="products"><a href="#"><img src="./login-images/龙虾.jpg" class="productimg"></a><a
+                        href="#"><span class="proname">Australia Lobster</span></a>
+                    <div class="price"><span class="pre">$20.99/500g</span><span
+                            class="after"><del>$25.99/500g</del></span>
+                    </div>
+                </div>
+            </div>
+            <p class="left">&lt;</p>
+            <p class="right">&gt;</p>
+        </div>
+
+    </div>
+    <div class="detail w">
+        <div class="products" style="margin-left: 0px;"><a href="#"><img src="./login-images/detail/cabbage.jpg"
+                    class="productimg"></a><a href="#"><span class="proname">Cabbage</span></a>
+            <div class="price"><span class="pre">$2.99/500g</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/freeplus.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Freeplus Facial Cleanser</span></a>
+            <div class="price"><span class="pre">$15.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/spirit.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Red Star Erguotou</span></a>
+            <div class="price"><span class="pre">$25.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/yagao.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Crest Toothpaste</span></a>
+            <div class="price"><span class="pre">$4.99</span>
+            </div>
+        </div>
+        <div class="products" style="margin-left: 0px;"><a href="#"><img src="./login-images/detail/马桶.jpg"
+                    class="productimg"></a><a href="#"><span class="proname">Toilet Plunger</span></a>
+            <div class="price"><span class="pre">$4.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/黑米糕.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Purple Rice Cake</span></a>
+            <div class="price"><span class="pre">$5.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/line.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Apple Lightening Line</span></a>
+            <div class="price"><span class="pre">$24.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/jiangyou.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Soy Sauce</span></a>
+            <div class="price"><span class="pre">$5.99</span>
+            </div>
+        </div>
+        <div class="products" style="margin-left: 0px;"><a href="#"><img src="./login-images/detail/gouliang.jpg"
+                    class="productimg"></a><a href="#"><span class="proname">Royal Canin for Dog</span></a>
+            <div class="price"><span class="pre">$19.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/kitchen.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Slice</span></a>
+            <div class="price"><span class="pre">$9.99</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/zongzi.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Zongzi</span></a>
+            <div class="price"><span class="pre">$3.59</span>
+            </div>
+        </div>
+        <div class="products"><a href="#"><img src="./login-images/detail/yusan.jpg" class="productimg"></a><a
+                href="#"><span class="proname">Umbrella</span></a>
+            <div class="price"><span class="pre">$8.99</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="clearfix w">
+            <div class="left">
+                <dl>
+                    <dt>About us</dt>
+                    <dd><a href="#" class="hover">History</a></dd>
+                    <dd><a href="#" class="hover">Cooperator</a></dd>
+                    <dd><a href="#" class="hover">News</a></dd>
+                    <dd><a href="#" class="hover">Careers</a></dd>
+                    <dd><a href="#" class="hover">More Help</a></dd>
+                </dl>
+            </div>
+            <div class="mid">
+                <div class="wrapper">
+                    <ul>
+                        <li class="facebook"><a href="#"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                        <li class="twitter"><a href="#"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a></li>
+                        <li class="instagram"><a href="#"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                        <li class="google"><a href="#"><i class="fa fa-google fa-2x" aria-hidden="true"></i></a></li>
+                        <li class="whatsapp"><a href="#"><i class="fa fa-whatsapp fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <dl>
+                    <dt>Newbie Guide</dt>
+                    <dd><a href="#" class="hover">How to register</a></dd>
+                    <dd><a href="#" class="hover">How to shopping</a></dd>
+                    <dd><a href="#" class="hover">How to complete user information</a></dd>
+                    <dd><a href="#" class="hover">How to request help</a></dd>
+                </dl>
+            </div>
+        </div>
+        <div>
+
+            <!-- Yu Yu -->
+            <p class="copyright">Copyright © 2020 CCC Inc. All rights reserved.</p>
+        </div>
+    </div>
+    <div class="elevator">
+        <ul>
+            <li id="up"><img src="./login-images/icons/双箭头上.png" alt=""></li>
+            <li id="mid"><img src="./login-images/icons/闹钟2.png" alt=""></li>
+            <li id="mid2"><img src="./login-images/icons/商品.png" alt=""></li>
+            <li id="down"><img src="./login-images/icons/双箭头下.png" alt=""></li>
+        </ul>
+    </div>
+</body>
+
+</html>

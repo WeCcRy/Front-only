@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="homepage.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //header轮播图
+            var header = ["./login-images/header1.jpg", "./login-images/header2.jpg", "./login-images/header3.jpg"];
+            var timer;
+            var count = 0;
+            startchange();
+            //每1.5s自动切换图片
+            function startchange() {
+                timer = setInterval(function () {
+                    count++;
+                    count = count % 3;
+                    document.getElementById("img1").setAttribute("src", header[count]);
+                }, 1500)
+            };
+            //轮播图
+            function slideshow() {
+                var slideshow = document.getElementById("slideshow"),
+                    imgs = slideshow.getElementsByTagName("img"), //得到图片们
+                    pages = slideshow.getElementsByTagName("span"), //得到页码们
+                    buttons = slideshow.getElementsByTagName("p"), //得到描述们
+                    left_btn = buttons[0],
+                    right_btn = buttons[1],
+                    current = 0;
+                //图片淡出
+                function slideOff() {
+                    imgs[current].className = "";
+                    pages[current].className = "";
+                }
+                //图片淡入
+                function slideOn() {
+                    imgs[current].className = "active";
+                    pages[current].className = "active";
+                }
+                //切换图片
+                function changeSlide() {
+                    slideOff();
+                    current++;
+                    if (current >= 3) current = 0;
+                    slideOn();
+                }
+
+                //每2s调用changeSlide函数进行图片轮播
+                var slideon = setInterval(changeSlide, 2000);
+
+                //当鼠标移入时清除轮播事件
+                slideshow.onmouseover = function () {
+                    clearInterval(slideon);
+                }
+                //当鼠标移出时重新开始轮播事件
+                slideshow.onmouseout = function () {
+                    slideon = setInterval(changeSlide, 2000);
+                }
+                //定义鼠标移入和移出页码事件
+                for (var i = 0; i < pages.length; i++) {
+                    pages[i].onmouseover = function () {
+                        slideOff(); //图片淡出
+                        current = this.getAttribute("name"); //得到鼠标停留的页码对应的current
+                        slideOn(); //图片淡入
+                    }
+                }
+
+                left_btn.onclick = function () {
+                    slideOff(); //图片淡出
+                    current--;
+                    if (current < 0) current = 2;
+                    slideOn(); //图片淡入
+                }
+                right_btn.onclick = function () {
+                    slideOff(); //图片淡出
+                    current++;
+                    if (current > 2) current = 0;
+                    slideOn(); //图片淡入
+                }
+            }
+            //页面加载时便开始轮播
+            slideshow();
+        })
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <img id="img1" src="./login-images/header1.jpg"><br />
+    </div>
+    <div class="nav">
+        <ul class="w">
+            <li class="navigation"><img src="./login-images/C.png" </li>
+            <li class="navigation"><a href="feedback.html">Feedback</a></li>
+            <li class="navigation"><a href="login.html">User Information</a></li>
+            <li class="navigation"><a href="shopping.html">Shopping Now</a></li>
+            <li class="navigation"><a href="Support.html">Support</a></li>
+        </ul>
+    </div>
+    <div class="show">
+        <div id="slideshow">
+            <img class="active" src="./login-images/background1.jpg" />
+            <img src="./login-images/background2.jpg" />
+            <img src="./login-images/background3.jpg" />
+            <div>
+                <span class="active" name="0"></span>
+                <span name="1"></span>
+                <span name="2"></span>
+            </div>
+            <p class="left">&lt;</p>
+            <p class="right">&gt;</p>
+        </div>
+    </div>
+    <div class="body w">
+        <div class="box-bd">
+            <ul class="clearfix">
+                <li>
+                    <img src="./login-images/intro1.jpg" alt="">
+                    <p class="info">Provide Compehensive Services To Your Family All The Time</p>
+                </li>
+                <li><img src="./login-images/intro2.jpg" alt="">
+                    <p class="info">Customer Service Is Always Available To Help You</p>
+                </li>
+                <li><img src="./login-images/intro3.jpg"" alt="">
+                    <p class=" info">Our Website Is Available For Everyone All The Time</p>
+                </li>
+                <li><img src="./login-images/intro4.jpg"" alt="">
+                    <p class=" info">We Are Committed To Always Providing Best Service</p>
+                </li>
+                <li><img src="./login-images/intro5.jpg"" alt="">
+                    <p class=" info">Use Phone Or Computer To Experience Our Service</p>
+                </li>
+                <li><img src="./login-images/intro6.jpg"" alt="">
+                    <p class=" info">Let You Feel The Fresh Fruit Without Leaving The House</p>
+                </li>
+                <li><img src="./login-images/intro7.jpg"" alt="">
+                    <p class=" info">Distribution is By Nearest Warehouse Or Supermarket</p>
+                </li>
+                <li><img src="./login-images/intro8.jpg"" alt="">
+                    <p class=" info">Offer A Extremely Wide Range Of Different Products</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer w ">
+        <div class="clearfix">
+            <div class="left">
+                <dl>
+                    <dt>About us</dt>
+                    <dd><a href="#" class="hover">History</a></dd>
+                    <dd><a href="#" class="hover">Cooperator</a></dd>
+                    <dd><a href="#" class="hover">News</a></dd>
+                    <dd><a href="#" class="hover">Careers</a></dd>
+                    <dd><a href="#" class="hover">More Help</a></dd>
+                </dl>
+            </div>
+            <div class="mid">
+                <div class="wrapper">
+                    <ul>
+                        <li class="facebook"><a href="#"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                        <li class="twitter"><a href="#"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a></li>
+                        <li class="instagram"><a href="#"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                        <li class="google"><a href="#"><i class="fa fa-google fa-2x" aria-hidden="true"></i></a></li>
+                        <li class="whatsapp"><a href="#"><i class="fa fa-whatsapp fa-2x" aria-hidden="true"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <dl>
+                    <dt>Newbie Guide</dt>
+                    <dd><a href="#" class="hover">How to register</a></dd>
+                    <dd><a href="#" class="hover">How to shopping</a></dd>
+                    <dd><a href="#" class="hover">How to complete user information</a></dd>
+                    <dd><a href="#" class="hover">How to request help</a></dd>
+                </dl>
+            </div>
+
+        </div>
+        <div>
+
+            <!-- Yu Yu -->
+            <p class="copyright">Copyright © 2020 CCC Inc. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <style>
+        .w {
+
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        .top {
+            position: relative;
+            overflow: hidden;
+            height: 143px;
+            border-bottom: #43a047 solid 3px;
+        }
+
+        .w span {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            height: 143px;
+            line-height: 143px;
+            font-size: 48px;
+            color: #666666;
+            margin-left: 50px;
+            margin-top: -50px;
+        }
+
+        .text {
+            margin: 30px 20px 30px 20px;
+        }
+
+        .text p {
+            font-size: 14px;
+            line-height: 25px;
+        }
+
+        .box {
+            height: 210px;
+            border: #cce8ff solid 1px;
+            margin: 10px 0;
+        }
+
+        .box p {
+            margin: 1px 1px 1px 1px;
+            font-size: 15px;
+            line-height: 25px;
+            height: 25px;
+            text-indent: 2em;
+            background-color: #eef6ff;
+        }
+
+        #suggestions {
+            width: 500px;
+            height: 120px;
+            margin: auto auto;
+            margin: 30px 50px;
+        }
+
+        .radio {
+            height: 30px;
+            line-height: 30px;
+            margin-top: 5px;
+            margin-left: 40px;
+        }
+
+        .box i {
+            margin: 0 40px;
+            display: inline-block;
+            width: 120px;
+            height: 30px;
+        }
+
+        .input {
+            margin-top: 50px;
+        }
+
+        button {
+            display: block;
+            position: relative;
+            left: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w">
+        <div class="top">
+            <img src="./login-images/logo1.png" alt="" style="width: 101px;height: 143px;">
+            <span>User feedback</span>
+        </div>
+        <div class="form">
+            <form action="">
+                <div class='text'>
+                    <p>Dear Users:</p>
+                    <p>Hello! In order to provide you with better service, we hope to collect your opinions or
+                        suggestions when using the pages of us.
+                        We would like to express our sincere thanks for your cooperation and support.</p>
+                </div>
+                <div class="box">
+                    <p>Please tell us your suggestions about our pages.</p>
+                    <textarea name="" id="suggestions"></textarea>
+                </div>
+                <div class="box">
+                    <p>What is your overall satisfaction with our pages</p>
+                    <div class="radio"><input type="radio" name="sat">Very good</div>
+                    <div class="radio"><input type="radio" name="sat">Good</div>
+                    <div class="radio"><input type="radio" name="sat">Not good but not bad</div>
+                    <div class="radio"><input type="radio" name="sat">Bad</div>
+                    <div class="radio"><input type="radio" name="sat">Very bad</div>
+                </div>
+                <div class="box">
+                    <p>Please leave your contact information, so that we can communicate at any time</p>
+                    <div class="input">
+                        <div><i>Name:</i><input type="text"></div>
+                        <div><i>Telephone:</i><input type="text"></div>
+                    </div>
+                </div>
+                <button>Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
